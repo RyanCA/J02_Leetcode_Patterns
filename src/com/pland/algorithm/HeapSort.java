@@ -7,7 +7,6 @@ package com.pland.algorithm;
  * for you to understand heap sort
  * 
  * 
- * @author chenyena
  *
  */
 public class HeapSort {

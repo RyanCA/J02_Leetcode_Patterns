@@ -9,8 +9,9 @@ import java.io.IOException;
 
 /**
  * http://exceptional-code.blogspot.ca/2011/07/external-sorting-for-sorting-large.html
- * @author chenyena
  *
+ * Cracking the coding interview
+ * Page 118 for merge sort and page 120 for binary search
  */
 
 public class MergeSort {

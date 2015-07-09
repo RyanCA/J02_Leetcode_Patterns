@@ -13,11 +13,11 @@ import java.util.Date;
  * on average, the algorithm takes O(n log n) comparisons to sort n items. 
  * In the worst case, it makes O(n2) comparisons, though this behavior is rare.
  * 
- * Algorithm:
+ * Algorithm: 
+ * Key
  * Value less than pivot, put on the left of pivot and 
  * value greater than pivot put on the right of pivot
  * 
- * @author xiu
  *
  */
 
