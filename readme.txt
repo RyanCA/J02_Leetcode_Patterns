@@ -8,7 +8,7 @@ https://github.com/RyanCA
 https://git-scm.com/book/en/v2
 
 ############################## If project in Git ##############################
-git clone https://github.com/RyanCA/springinaction4thedition.git
+git clone https://github.com/RyanCA/J02_Leetcode_Patterns.git
 
 ######################## A: If a project in local already ######################
 
@@ -33,8 +33,8 @@ B: If no repository for your project on Github, then you need do following steps
 2.2 copy the url of new repo and use below commands to associate local and git server 
 git remote add origin https://github.com/RyanCA/J02_Leetcode_Patterns.git
 git remote -v                     # Check if add remote successfully or not
-origin  https://github.com/RyanCA/springinaction4thedition.git (fetch)
-origin  https://github.com/RyanCA/springinaction4thedition.git (push)
+origin  https://github.com/RyanCA/J02_Leetcode_Patterns.git (fetch)
+origin  https://github.com/RyanCA/J02_Leetcode_Patterns.git (push)
 
 ################################################################################
 
@@ -51,8 +51,8 @@ git tag                           # List all tags
 git show -v0.1                    # Show specific Tag
 
 #Checkout a specific tag (Page 78 of progit-en.1084.pdf or https://git-scm.com/book/en/v2)
-git clone  https://github.com/RyanCA/springinaction4thedition.git
-cd springinaction4thedition
+git clone  https://github.com/RyanCA/J02_Leetcode_Patterns.git
+cd J02_Leetcode_Patterns
 git show v0.2                     # Spring MVC, Spring Security and Spring Exception Handling Done
 git checkout -b springmvc v0.2    # -b [branch name] [tag name]
 git status                        # Show on springmvc branch now
