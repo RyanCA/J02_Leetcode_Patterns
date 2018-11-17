@@ -1,0 +1,195 @@
+package com.pland.leetcode.java.binarytree;
+
+public class BinaryTreeUtility{
+	
+	public static void main(String args[]){
+		
+		test();
+		
+		
+		
+	}
+	
+	public static void test(){
+		Integer[] array = new Integer[21];
+		array[0]=3;
+		array[1]=5;
+		array[2]=9;
+		array[3]=6;
+		array[4]=8;
+		array[5]=20;
+		array[6]=10;
+		array[7]=null;
+		array[8]=null;
+		array[9]=9;
+		array[10]=null;
+		array[11]=null;
+		array[12]=null;
+		array[13]=null;
+		array[14]=null;
+		array[15]=null;
+		array[16]=null;
+		array[17]=null;
+		array[18]=null;
+		array[19]=null;
+		array[20]=null;
+		
+		
+		TreeNode root = buildBinaryTreeFromArray(array);
+		binaryTreeTravesalPreOrder(root);
+		binaryTreeTravesalInOrder(root);
+		binaryTreeTravesalPostOrder(root);
+	}
+	
+	
+	
+	/**
+	 * https://www.geeksforgeeks.org/binary-tree-array-implementation/
+	 * 
+	 * Binary tree can be represented by array, here is an example:
+	 * 
+	 *               3
+	 *             /  \
+	 *            5    9
+	 *           / \  / \ 
+	 *          6   8 20 10 
+	 *             /
+	 *            9
+	 *            
+	 * Array representation:
+	 * 
+	 * Array: 3 | 5 | 9 | 6 | 8 | 20 | 10 | null | null | 9 | null | null | null | null | null | null | null | null | null | null | null
+	 * Index: 0   1   2   3   4    5    6    7       8    9    10     11     12     13     14     15     16     17     18     19     20
+	 * 
+	 */
+	public static TreeNode buildBinaryTreeFromArray(Integer[] array){
+		
+		if(array == null){
+			throw new NullPointerException("Input array is null");
+		}
+		
+		if(array[0] == null){
+			throw new NullPointerException("array[0] is null");
+		}
+		
+		TreeNode root = new TreeNode(array[0]);
+		linkNode(root, array, 0);
+		return root;
+		
+		
+	}
+	
+	private static void linkNode(TreeNode node, Integer[] array, int index){
+		
+		if((2*index+1)+1 <= array.length){
+			if(array[2*index+1] == null){
+				node.leftNode = null;
+			}
+			else{
+				node.leftNode = new TreeNode(array[2*index+1]);
+				linkNode(node.leftNode, array, 2*index+1);
+			}
+	
+		}
+		
+		if((2*index+2)+1 <= array.length){
+			if(array[2*index+2] == null){
+				node.rightNode = null;
+			}
+			else{
+				node.rightNode = new TreeNode(array[2*index+2]);
+				linkNode(node.rightNode, array, 2*index+2);
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * Expected result: 3 5 6 8 9 9 20 10 
+	 * 
+	 */
+	public static void binaryTreeTravesalPreOrder(TreeNode root){
+		doPreOrder(root);
+		System.out.println();
+	}
+	
+	private static void doPreOrder(TreeNode node){
+		if(node != null){
+			System.out.print(node.value+" ");
+			if(node.leftNode != null){
+				doPreOrder(node.leftNode);
+			}
+			if(node.rightNode != null){
+				doPreOrder(node.rightNode);
+			}
+		}
+	}
+	
+	/**
+	 * Expected result: 6 5 9 8 3 20 9 10
+	 * 
+	 */
+	public static void binaryTreeTravesalInOrder(TreeNode root){
+		doInOrder(root);
+		System.out.println();
+	}
+	
+	private static void doInOrder(TreeNode node){
+		if(node != null){
+			if(node.leftNode != null){
+				doInOrder(node.leftNode);
+			}
+			System.out.print(node.value+" ");
+			if(node.rightNode != null){
+				doInOrder(node.rightNode);
+			}
+		}
+	}
+	
+	/**
+	 * Expected result: 6 9 8 5 20 10 9 3 
+	 * 
+	 */
+	public static void binaryTreeTravesalPostOrder(TreeNode root){
+		doPostOrder(root);
+		System.out.println();
+	}
+	
+	private static void doPostOrder(TreeNode node){
+		if(node != null){
+			if(node.leftNode != null){
+				doPostOrder(node.leftNode);
+			}
+			
+			if(node.rightNode != null){
+				doPostOrder(node.rightNode);
+			}
+			
+			System.out.print(node.value+" ");
+		}
+	}
+	
+	public void binaryTreeTravesalByLevel(TreeNode root){
+		
+	}
+
+}
+
+class TreeNode{
+	
+	public Integer value;
+	public TreeNode leftNode;
+	public TreeNode rightNode;
+	
+	public TreeNode(Integer value, TreeNode left, TreeNode right){
+		this.value = value;
+		this.leftNode = left;
+		this.rightNode = right;
+	}
+	
+	public TreeNode(Integer value){
+		this.value = value;
+	}
+	
+}
