@@ -1,5 +1,8 @@
 package com.pland.leetcode.java.binarytree;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class BinaryTreeUtility{
 	
 	public static void main(String args[]){
@@ -35,10 +38,18 @@ public class BinaryTreeUtility{
 		array[20]=null;
 		
 		
-		TreeNode root = buildBinaryTreeFromArray(array);
-		binaryTreeTravesalPreOrder(root);
-		binaryTreeTravesalInOrder(root);
-		binaryTreeTravesalPostOrder(root);
+//		TreeNode root = buildBinaryTreeFromArray(array);
+//		binaryTreeTravesalPreOrder(root);
+//		binaryTreeTravesalInOrder(root);
+//		binaryTreeTravesalPostOrder(root);
+//		binaryTreeTravesalByLevel(root);
+		
+		Integer[] preorderArray = {new Integer(3), new Integer(9), new Integer(20), new Integer(15), new Integer(7)};
+		Integer[] inorderArray = {new Integer(9), new Integer(3), new Integer(15), new Integer(20), new Integer(7)};
+		TreeNode root2 = buildTreeByPreAndInOrderArray(preorderArray, inorderArray);
+		binaryTreeTravesalPreOrder(root2);
+		binaryTreeTravesalInOrder(root2);
+		binaryTreeTravesalPostOrder(root2);
 	}
 	
 	
@@ -170,9 +181,156 @@ public class BinaryTreeUtility{
 		}
 	}
 	
-	public void binaryTreeTravesalByLevel(TreeNode root){
+	public static void binaryTreeTravesalByLevel(TreeNode root){
+		
+		ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>();
+		doLevelOrder(root, list, 0);
+		System.out.println(list);
+	}
+	
+	
+	private static void doLevelOrder(TreeNode node, ArrayList<ArrayList<Integer>> list, int depth){
+		
+		if(node != null){
+			if(list.size()-1 < depth){
+				ArrayList<Integer> subList = new ArrayList<Integer>();
+				list.add(depth, subList);
+			}
+			ArrayList<Integer> subList = list.get(depth);
+			subList.add(node.value);
+		}
+		
+		if(node.leftNode != null){
+			doLevelOrder(node.leftNode, list, depth+1);
+		}
+		
+		if(node.rightNode != null){
+			doLevelOrder(node.rightNode, list, depth+1);
+		}
+	}
+	
+	/**
+	 * 
+	 * https://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/
+	 * 
+	 * 1. Preorder determine next node;
+	 * 2. Inorder determine left tree and right tree;
+	 * @throws Exception 
+	 */
+	public static TreeNode buildTreeByPreAndInOrderArray(Integer[] preOrder, Integer[] inOrder){
+		
+		if(preOrder == null || inOrder == null || preOrder.length != inOrder.length){
+			throw new IllegalArgumentException("Arguments are not legal input");
+		}
+		
+		TreeNode root = doPreAndInOrderToBuildTree(null, 0, preOrder, inOrder);
+		return root;
 		
 	}
+	
+	private static TreeNode doPreAndInOrderToBuildTree(TreeNode node, int preOrderIndex, Integer[] preOrder, Integer[] inOrder){
+		
+        if(preOrderIndex == 0){
+        	node  = new TreeNode(preOrder[preOrderIndex]);
+        }
+			
+		Integer[] leftTreeNodes = leftTreeNodes(inOrder, preOrder[preOrderIndex]);
+		
+		if(leftTreeNodes == null){
+		    node.leftNode = null;
+		}
+		else{
+			boolean breakFlag = false;
+			int preOrderIndexForNextCall = 0;
+			
+			for(int i=preOrderIndex+1; i<preOrder.length; i++){
+
+				for(int j=0; j<leftTreeNodes.length; j++){
+					if(preOrder[i].equals(leftTreeNodes[j])){
+						node.leftNode = new TreeNode(leftTreeNodes[j]);
+						breakFlag = true;
+						if(breakFlag == true){
+							preOrderIndexForNextCall = i;
+							break;
+						}
+					}
+				}
+				
+				if(breakFlag == true){
+					break;
+				}
+			}
+			doPreAndInOrderToBuildTree(node.leftNode, preOrderIndexForNextCall, preOrder, leftTreeNodes);
+			
+		}
+		
+			
+		Integer[] rightTreeNodes = rightTreeNodes(inOrder, preOrder[preOrderIndex]);
+		if(rightTreeNodes == null){
+			node.rightNode = null;
+		}
+		else{
+			boolean breakFlag = false;
+			int preOrderIndexIIForNextCall = 0;
+			for(int i=preOrderIndex+1; i<preOrder.length; i++){
+				for(int j=0; j<rightTreeNodes.length; j++){
+					if(preOrder[i].equals(rightTreeNodes[j])){
+						node.rightNode = new TreeNode(rightTreeNodes[j]);
+						breakFlag = true;
+						if(breakFlag == true){
+							preOrderIndexIIForNextCall = i;
+							break;
+						}
+					}
+				}
+				if(breakFlag == true){
+					break;
+				}
+			}
+			doPreAndInOrderToBuildTree(node.rightNode, preOrderIndexIIForNextCall, preOrder, rightTreeNodes);
+		}
+
+		return node;
+		
+	}
+	
+	private static Integer[] leftTreeNodes(Integer[] inOrder, Integer midNodeValue){
+		int index = 0;
+		for(Integer temp : inOrder){
+			if(temp.equals(midNodeValue)){
+				break; 
+			}
+			index++;
+		}
+		//Scenario: there is no left tree
+		if(index-1<0){
+			return null;
+		}
+		Integer[] leftTreeArray = Arrays.copyOfRange(inOrder, 0, index-1);
+		return leftTreeArray;
+	}
+	
+	private static Integer[] rightTreeNodes(Integer[] inOrder, Integer midNodeValue){
+		int index = 0;
+		for(Integer temp : inOrder){
+			if(temp.equals(midNodeValue)){
+				break; 
+			}
+			index++;
+		}
+		
+		if(index < (inOrder.length-1)){
+			//System.out.println("index+1="+index+1+" inOrder.length-1="+(inOrder.length-1));
+			Integer[] leftTreeArray = Arrays.copyOfRange(inOrder, index+1, inOrder.length-1);
+			return leftTreeArray;
+		}
+		//Scenario: there is no right tree
+		else{
+			return null;
+		}
+		
+	}
+	
 
 }
 
@@ -183,12 +341,18 @@ class TreeNode{
 	public TreeNode rightNode;
 	
 	public TreeNode(Integer value, TreeNode left, TreeNode right){
+		if(value == null){
+			throw new NullPointerException("TreeNode value can't be null");
+		}
 		this.value = value;
 		this.leftNode = left;
 		this.rightNode = right;
 	}
 	
 	public TreeNode(Integer value){
+		if(value == null){
+			throw new NullPointerException("TreeNode value can't be null");
+		}
 		this.value = value;
 	}
 	
